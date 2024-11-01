@@ -1,0 +1,18 @@
+services:
+  nextcloud-web:
+    image: nginx:alpine
+    container_name: nextcloud-web
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - support_storage:/tmp
+    stdin_open: true
+    tty: true
+volumes:
+  support_storage:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.10.10.5,nolock,soft,rw,nfsvers=4"
+      device: ":/mnt/Pool1/TenantStorage/Support"
+
