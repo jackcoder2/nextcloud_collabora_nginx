@@ -1,17 +1,18 @@
 #!/bin/bash
 
 domain_name="libertyrising.online"
-REMOTE_USER="mmeade"
-REMOTE_HOST="10.10.10.5"
-REMOTE_PATH="/etc/nginx/conf.d/nextcloud_collabora.conf"
+REMOTE_PATH="/mnt/storage/letsencrypt/nextcloud_collabora.conf"
 
-# Set an environment variable
-ssh mmeade@10.10.10.5 "export domain_name=${domain_name}"
-ssh mmeade@10.10.10.5 "mkdir -p /mnt/Pool1/TenantStorage/Support/nginx-data && mkdir -p /mnt/Pool1/TenantStorage/Support/letsencrypt && chmod -R 755 /mnt/Pool1/TenantStorage/Support/nginx-data /mnt/Pool1/TenantStorage/Support/letsencrypt"
+sudo mkdir -p /mnt/storage
+sudo mount -t nfs -o rw,vers=4 10.10.10.5:/mnt/Pool1/TenantStorage/Support /mnt/storage
 
 
-# Use ssh with a heredoc to write multiple lines to the remote file
-ssh ${REMOTE_USER}@${REMOTE_HOST} << EOF
+# Create necessary directories locally on the Docker host
+sudo mkdir -p /mnt/storage/nginx-data
+sudo mkdir -p /mnt/storage/letsencrypt
+sudo chmod -R 755 /mnt/storage/nginx-data /mnt/storage/letsencrypt
+
+# Write multiple lines to the conf.d file directly on the Docker host
 cat << END_CONF > ${REMOTE_PATH}
 # Nextcloud server block
 server {
@@ -51,4 +52,3 @@ server {
     }
 }
 END_CONF
-EOF
