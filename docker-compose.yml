@@ -14,49 +14,29 @@ volumes:
 
 services:
   nginx:
-    image: nginx
+    image: nginx:1-alpine
     container_name: nginx
     restart: always
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - nginx_data:/etc/nginx/conf.d
+    #  - nginx_data:/etc/nginx/conf.d
       - letsencrypt:/etc/letsencrypt  # SSL certificates stored here
     networks:
       - internal
-    environment:
-      - CERTBOT_EMAIL=your-email@example.com  # Replace with your email
-      - DOMAIN_NAME=yourdomain.com  # Replace with your domain
+    #environment:
+    #  - CERTBOT_EMAIL=your-email@example.com  # Replace with your email
+    #  - DOMAIN_NAME=yourdomain.com  # Replace with your domain
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - letsencrypt:/etc/letsencrypt
-      - nginx_data:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
+  #certbot:
+  #  image: certbot/certbot
+  #  container_name: certbot
+  #  volumes:
+  #    - letsencrypt:/etc/letsencrypt
+  #    - nginx_data:/var/www/certbot
+  #  entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
 
 networks:
   internal:
     driver: bridge
-
-
-services:
-  nextcloud-web:
-    image: nginx:alpine
-    container_name: nextcloud-web
-    restart: unless-stopped
-    ports:
-      - 80:80
-    volumes:
-      - support_storage:/tmp
-    stdin_open: true
-    tty: true
-volumes:
-  support_storage:
-    driver_opts:
-      type: "nfs"
-      o: "addr=10.10.10.5,nolock,soft,rw,nfsvers=4"
-      device: ":/mnt/Pool1/TenantStorage/Support"
-

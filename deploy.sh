@@ -1,7 +1,7 @@
 #!/bin/bash
 
 domain_name="libertyrising.online"
-REMOTE_PATH="/mnt/storage/letsencrypt/nextcloud_collabora.conf"
+REMOTE_PATH="/mnt/storage/nextcloud_collabora_nginx/nextcloud_collabora.conf"
 
 sudo mkdir -p /mnt/storage
 sudo mount -t nfs -o rw,vers=4 10.10.10.5:/mnt/Pool1/TenantStorage/Support /mnt/storage
@@ -9,7 +9,7 @@ sudo mount -t nfs -o rw,vers=4 10.10.10.5:/mnt/Pool1/TenantStorage/Support /mnt/
 
 # Create necessary directories locally on the Docker host
 sudo mkdir -p /mnt/storage/nginx-data
-sudo mkdir -p /mnt/storage/letsencrypt
+sudo mkdir -p /mnt/storage/nextcloud_collabora_nginx
 sudo chmod -R 755 /mnt/storage/nginx-data /mnt/storage/letsencrypt
 
 # Write multiple lines to the conf.d file directly on the Docker host
